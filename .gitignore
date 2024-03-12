@@ -8,6 +8,7 @@ venv/
 # Ignore specific outputs that should not be tracked
 output/
 *.txt
+!requirements.txt
 
 # Additionally, ignore all .DS_Store files (common in macOS)
 .DS_Store
