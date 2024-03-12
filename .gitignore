@@ -1,0 +1,13 @@
+# Ignore all files that might contain sensitive information or are not needed
+*.env
+*.pyc
+__pycache__/
+*.docx
+venv/
+
+# Ignore specific outputs that should not be tracked
+output/
+*.txt
+
+# Additionally, ignore all .DS_Store files (common in macOS)
+.DS_Store
