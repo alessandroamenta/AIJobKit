@@ -56,7 +56,22 @@ def generate_documents(resume, job_description, bio, api_key):
 
         logging.info("Successfully generated the documents")
         logging.info(f"AI Response: {response.content[0].text.strip()}")
-        return response.content[0].text.strip()
+
+        # Split the AI response into the individual outputs
+        sections = response.content[0].text.strip().split("\n\n===")
+        outputs = {}
+        for section in sections:
+            if section.strip():
+                section_title = section.strip().split("\n")[0].strip("===")
+                section_content = "\n".join(section.strip().split("\n")[1:])
+                outputs[section_title] = section_content
+
+        logging.info(f"Outputs: {outputs}")
+        return outputs
+
+    except Exception as e:
+        logging.error(f"Error generating documents: {e}")
+        return None
 
     except Exception as e:
         logging.error(f"Error generating documents: {e}")
