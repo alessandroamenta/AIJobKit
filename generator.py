@@ -36,7 +36,7 @@ def generate_documents(resume, job_description, bio, api_key):
         ).format(resume=resume, job_description=job_description, bio=bio)
 
         logging.info(f"Sending the following prompt to the AI: {prompt}")
-        response = client.messages.create(
+        response = client.messages.create( 
             model="claude-3-haiku-20240307",
             max_tokens=4000,
             system=system_prompt,
