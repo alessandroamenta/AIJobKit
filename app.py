@@ -6,8 +6,8 @@ def main():
 
     # User input for API key and provider
     st.sidebar.title("API Settings")
-    ai_provider = st.sidebar.selectbox("Select AI Provider", ["Anthropic", "OpenAI"])
-    api_key = st.sidebar.text_input("Enter your API key:")
+    ai_provider = st.sidebar.radio("Select AI Provider", ["Anthropic", "OpenAI"], index=0, format_func=lambda x: f"{x} {'🦜' if x == 'Anthropic' else '🤖'}")
+    api_key = st.sidebar.text_input("Enter your API key:", type="password")
 
 
     # User inputs
@@ -55,6 +55,17 @@ def main():
         - 💡 Add any additional information you want the AI to consider
         - 🚀 Click the "Generate Documents" button and let the magic happen!
         """)
+
+        # Feedback form in the sidebar
+    with st.sidebar:
+        st.subheader("Your Feedback 📮")
+        # Start of the form
+        with st.form(key='feedback_form'):
+            feedback = st.text_area("Share your thoughts on the tool:")
+            submit_feedback = st.form_submit_button(label='Submit Feedback')
+        
+        if submit_feedback:
+            st.sidebar.success("Thanks for your feedback!")
 
 if __name__ == "__main__":
     main()
