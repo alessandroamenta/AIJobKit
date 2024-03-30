@@ -1,12 +1,22 @@
 import streamlit as st
 from generator import generate_documents
+import streamlit_toggle as tog
+from streamlit_gsheets import GSheetsConnection
+
 
 def main():
     st.title("Job Search Automation 🚀")
 
     # User input for API key and provider
     st.sidebar.title("API Settings")
-    ai_provider = st.sidebar.radio("Select AI Provider", ["Anthropic", "OpenAI"], index=0, format_func=lambda x: f"{x} {'🦜' if x == 'Anthropic' else '🤖'}")
+    ai_provider_toggle = st.sidebar.toggle("Select AI Provider", value=True, key="ai_provider_toggle")
+    if ai_provider_toggle:
+        ai_provider = "**Anthropic**"
+        ai_provider_emoji = "🦜"
+    else:
+        ai_provider = "**OpenAI**"
+        ai_provider_emoji = "🤖"
+    st.sidebar.write(f"You have selected {ai_provider} {ai_provider_emoji}")
     api_key = st.sidebar.text_input("Enter your API key:", type="password")
 
 
@@ -36,7 +46,7 @@ def main():
         # Show loader while generating documents
         with st.spinner("GPT is cooking up the stuff to help you out, just a sec chief! 👨‍🍳"):
             # Generate outputs
-            outputs = generate_documents(resume, job_description, bio, api_key, ai_provider, formality_level, additional_info)
+            outputs = generate_documents(resume, job_description, bio, api_key, ai_provider.replace("**", ""), formality_level, additional_info)
 
         if outputs:
             for section_title, section_key in output_section_titles.items():
@@ -56,16 +66,19 @@ def main():
         - 🚀 Click the "Generate Documents" button and let the magic happen!
         """)
 
-        # Feedback form in the sidebar
+    # Feedback form in the sidebar
     with st.sidebar:
         st.subheader("Your Feedback 📮")
         # Start of the form
         with st.form(key='feedback_form'):
             feedback = st.text_area("Share your thoughts on the tool:")
             submit_feedback = st.form_submit_button(label='Submit Feedback')
-        
-        if submit_feedback:
-            st.sidebar.success("Thanks for your feedback!")
+            if submit_feedback:
+                # Create a GSheets connection
+                conn = st.experimental_connection("gsheets", type=GSheetsConnection)
+                # Append the feedback to the Google Sheet
+                conn.append(worksheet="Feedback", data=[[feedback]])
+                st.sidebar.success("Thanks for your feedback!")
 
 if __name__ == "__main__":
     main()

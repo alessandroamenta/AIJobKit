@@ -12,3 +12,5 @@ output/
 
 # Additionally, ignore all .DS_Store files (common in macOS)
 .DS_Store
+
+secrets.toml
