@@ -1,6 +1,5 @@
 import streamlit as st
 from generator import generate_documents
-from streamlit_gsheets import GSheetsConnection
 import gspread
 from google.oauth2.service_account import Credentials
 from google.oauth2 import service_account
@@ -20,6 +19,9 @@ def main():
         ai_provider_emoji = "🤖"
     st.sidebar.write(f"You have selected {ai_provider} {ai_provider_emoji}")
     api_key = st.sidebar.text_input("Enter your API key:", type="password")
+
+    # API key warning
+    st.sidebar.warning("Heads up: make sure you have a valid API key from either provider and sufficient funds in your account. Otherwise, the app won't work.")
 
 
     # User inputs
@@ -70,11 +72,11 @@ def main():
 
     # Feedback form in the sidebar
     with st.sidebar:
-                st.subheader("Your Feedback 📮")
+                st.subheader("Got Feedback or features you'd find useful? 📮")
                 # Start of the form
                 with st.form(key='feedback_form'):
-                    feedback = st.text_area("Share your thoughts on the tool:")
-                    submit_feedback = st.form_submit_button(label='Submit Feedback')
+                    feedback = st.text_area("Share your thoughts with me here:")
+                    submit_feedback = st.form_submit_button(label='Submit Feedback 🙌')
                     if submit_feedback:
                         # Set up the Google Sheets API
                         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
@@ -84,7 +86,7 @@ def main():
                         # Open the Google Sheet and append the feedback
                         sh = client.open('prototype_feedback').worksheet('Feedback')
                         sh.append_row([feedback])
-                        st.sidebar.success("Thanks for your feedback!")
+                        st.sidebar.success("Thanks for your feedback! 🙏")
 
 if __name__ == "__main__":
     main() 
