@@ -1,6 +1,9 @@
 import streamlit as st
 from generator import generate_documents
 from streamlit_gsheets import GSheetsConnection
+import gspread
+from google.oauth2.service_account import Credentials
+from google.oauth2 import service_account
 
 
 def main():
@@ -67,24 +70,21 @@ def main():
 
     # Feedback form in the sidebar
     with st.sidebar:
-        st.subheader("Your Feedback 📮")
-        # Start of the form
-        with st.form(key='feedback_form'):
-            feedback = st.text_area("Share your thoughts on the tool:")
-            submit_feedback = st.form_submit_button(label='Submit Feedback')
-            if submit_feedback:
-                # Create a GSheets connection
-                conn = st.connection("gsheets", type=GSheetsConnection)
-                # Get the existing worksheet data
-                try:
-                    worksheet_data = conn.read()
-                except:
-                    worksheet_data = []
-                # Append the new feedback to the existing data
-                worksheet_data.append([feedback])
-                # Update the worksheet with the new data
-                conn.update(worksheet="Feedback", data=worksheet_data)
-                st.sidebar.success("Thanks for your feedback!")
+                st.subheader("Your Feedback 📮")
+                # Start of the form
+                with st.form(key='feedback_form'):
+                    feedback = st.text_area("Share your thoughts on the tool:")
+                    submit_feedback = st.form_submit_button(label='Submit Feedback')
+                    if submit_feedback:
+                        # Set up the Google Sheets API
+                        scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+                        creds = Credentials.from_service_account_file('credentials.json', scopes=scope)
+                        client = gspread.authorize(creds)
+
+                        # Open the Google Sheet and append the feedback
+                        sh = client.open('prototype_feedback').worksheet('Feedback')
+                        sh.append_row([feedback])
+                        st.sidebar.success("Thanks for your feedback!")
 
 if __name__ == "__main__":
-    main()
+    main() 
