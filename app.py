@@ -1,6 +1,5 @@
 import streamlit as st
 from generator import generate_documents
-import streamlit_toggle as tog
 from streamlit_gsheets import GSheetsConnection
 
 
@@ -75,9 +74,16 @@ def main():
             submit_feedback = st.form_submit_button(label='Submit Feedback')
             if submit_feedback:
                 # Create a GSheets connection
-                conn = st.experimental_connection("gsheets", type=GSheetsConnection)
-                # Append the feedback to the Google Sheet
-                conn.append(worksheet="Feedback", data=[[feedback]])
+                conn = st.connection("gsheets", type=GSheetsConnection)
+                # Get the existing worksheet data
+                try:
+                    worksheet_data = conn.read()
+                except:
+                    worksheet_data = []
+                # Append the new feedback to the existing data
+                worksheet_data.append([feedback])
+                # Update the worksheet with the new data
+                conn.update(worksheet="Feedback", data=worksheet_data)
                 st.sidebar.success("Thanks for your feedback!")
 
 if __name__ == "__main__":
