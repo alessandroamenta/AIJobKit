@@ -3,6 +3,7 @@ from generator import generate_documents
 import gspread
 from google.oauth2.service_account import Credentials
 from google.oauth2 import service_account
+import toml
 
 
 def main():
@@ -76,21 +77,22 @@ def main():
 
     # Feedback form in the sidebar
     with st.sidebar:
-                st.subheader("Got Feedback or features you'd find useful? 📮")
-                # Start of the form
-                with st.form(key='feedback_form'):
-                    feedback = st.text_area("Share your thoughts with me here:")
-                    submit_feedback = st.form_submit_button(label='Submit Feedback 🙌')
-                    if submit_feedback:
-                        # Set up the Google Sheets API
-                        scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-                        creds = Credentials.from_service_account_file('credentials.json', scopes=scope)
-                        client = gspread.authorize(creds)
+        st.subheader("Got Feedback or features you'd find useful? 📮")
+        # Start of the form
+        with st.form(key='feedback_form'):
+            feedback = st.text_area("Share your thoughts with me here:")
+            submit_feedback = st.form_submit_button(label='Submit Feedback 🙌')
+            if submit_feedback:
+                # Set up the Google Sheets API using TOML secrets
+                secrets = toml.loads(st.secrets["gcp_service_account"])
+                scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+                creds = service_account.Credentials.from_service_account_info(secrets, scopes=scope)
+                client = gspread.authorize(creds)
 
-                        # Open the Google Sheet and append the feedback
-                        sh = client.open('prototype_feedback').worksheet('Feedback')
-                        sh.append_row([feedback])
-                        st.sidebar.success("Thanks for your feedback! 🙏")
+                # Open the Google Sheet and append the feedback
+                sh = client.open('prototype_feedback').worksheet('Feedback')
+                sh.append_row([feedback])
+                st.sidebar.success("Thanks for your feedback! 🙏")
 
 if __name__ == "__main__":
     main() 
