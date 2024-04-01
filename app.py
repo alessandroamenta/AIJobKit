@@ -6,7 +6,7 @@ from google.oauth2 import service_account
 
 
 def main():
-    st.title("Job Search Automation 🚀")
+    st.title("🤖 JobBot: Your AI-Powered Job Application Sidekick")
 
     # User input for API key and provider
     st.sidebar.title("API Settings")
@@ -21,7 +21,7 @@ def main():
     api_key = st.sidebar.text_input("Enter your API key:", type="password")
 
     # API key warning
-    st.sidebar.warning("Heads up: make sure you have a valid API key from either provider and sufficient funds in your account. Otherwise, the app won't work.")
+    st.sidebar.warning("⚠️ Heads up: make sure you have a valid API key from either provider and sufficient funds in your account. Otherwise, the app won't work.")
 
 
     # User inputs
@@ -46,9 +46,9 @@ def main():
         "Customized Cold Email": "CUSTOMIZED COLD EMAIL"
     }
 
-    if st.button("Generate Documents"):
+    if st.button("✨Generate Docs"):
         # Show loader while generating documents
-        with st.spinner("GPT is cooking up the stuff to help you out, just a sec chief! 👨‍🍳"):
+        with st.spinner("🤖AI is cooking up the docs to help with your application, just a few secs! 👨‍🍳"):
             # Generate outputs
             outputs = generate_documents(resume, job_description, bio, api_key, ai_provider.replace("**", ""), formality_level, additional_info)
 
@@ -62,12 +62,12 @@ def main():
     st.sidebar.subheader("How to Use 🤖")
     with st.sidebar.expander("Click here to see a quick guide!"):
         st.markdown("""
-        - 📝 Copy and paste your resume into the designated area
+        - 📝 Copy and paste your resume
         - 📋 Copy and paste the job description you're applying for
-        - 🙋‍♂️ Provide a brief bio or introduction about yourself
-        - 🔧 Select the desired formality level for the cover letter and email
-        - 💡 Add any additional information you want the AI to consider
-        - 🚀 Click the "Generate Documents" button and let the magic happen!
+        - 🙋‍♂️ Provide a brief bio/intro about yourself
+        - 🔧 Pick the formality level for the cover letter and email (default works well for most cases)
+        - 💡 Add any additional information you want the AI to consider (optional)
+        - 🚀 Click the "Generate Documents" button and let the magic happen!✨
         """)
 
     # Feedback form in the sidebar
