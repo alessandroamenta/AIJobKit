@@ -85,18 +85,14 @@ def main():
             if submit_feedback:
                 # Set up the Google Sheets API using TOML secrets
                 try:
-                    for key, value in st.secrets.items():
-                        if "type" in value and value["type"] == "service_account":
-                            creds = service_account.Credentials.from_service_account_info(value, scopes=['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
-                            client = gspread.authorize(creds)
+                    secrets = toml.loads(st.secrets["service_account"])
+                    creds = service_account.Credentials.from_service_account_info(secrets, scopes=['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
+                    client = gspread.authorize(creds)
 
-                            # Open the Google Sheet and append the feedback
-                            sh = client.open('prototype_feedback').worksheet('Feedback')
-                            sh.append_row([feedback])
-                            st.sidebar.success("Thanks for your feedback! 🙏")
-                            break
-                    else:
-                        st.sidebar.error("Error: Could not find the Google Service Account credentials in the secrets.")
+                    # Open the Google Sheet and append the feedback
+                    sh = client.open('prototype_feedback').worksheet('Feedback')
+                    sh.append_row([feedback])
+                    st.sidebar.success("Thanks for your feedback! 🙏")
                 except Exception as e:
                     st.sidebar.error(f"Error: {e}")
 
