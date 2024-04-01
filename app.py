@@ -20,6 +20,10 @@ def main():
     st.sidebar.write(f"You have selected {ai_provider} {ai_provider_emoji}")
     api_key = st.sidebar.text_input("Enter your API key:", type="password")
 
+    if not api_key:
+        st.sidebar.error("🚨 Please enter a valid API key to use the app.")
+        st.stop()
+
     # API key warning
     st.sidebar.warning("⚠️ Heads up: make sure you have a valid API key from either provider and sufficient funds in your account. Otherwise, the app won't work.")
 
