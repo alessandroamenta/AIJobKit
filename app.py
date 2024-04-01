@@ -85,8 +85,7 @@ def main():
             if submit_feedback:
                 # Set up the Google Sheets API using TOML secrets
                 try:
-                    secrets = toml.loads(st.secrets.get_all())
-                    for key, value in secrets.items():
+                    for key, value in st.secrets.items():
                         if "type" in value and value["type"] == "service_account":
                             creds = service_account.Credentials.from_service_account_info(value, scopes=['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
                             client = gspread.authorize(creds)
