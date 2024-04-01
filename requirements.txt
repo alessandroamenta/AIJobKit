@@ -2,7 +2,6 @@ altair==5.2.0
 annotated-types==0.6.0
 anthropic==0.19.1
 anyio==4.3.0
-appscript==1.2.5
 attrs==23.2.0
 blinker==1.7.0
 cachetools==5.3.3
