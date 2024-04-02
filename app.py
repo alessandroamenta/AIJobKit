@@ -7,7 +7,7 @@ import toml
 
 
 def main():
-    st.title("🤖 JobBot: your AI Job Application Sidekick")
+    st.title("🤖 JobBot: AI Job Application Sidekick")
 
     # User input for API key and provider
     st.sidebar.title("API Settings")
