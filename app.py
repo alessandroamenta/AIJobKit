@@ -7,6 +7,7 @@ import toml
 
 
 def main():
+    st.set_page_config(page_title='JobBot', page_icon='🤖')
     st.title("🤖 JobBot: AI Job Application Sidekick")
 
     # User input for API key and provider
